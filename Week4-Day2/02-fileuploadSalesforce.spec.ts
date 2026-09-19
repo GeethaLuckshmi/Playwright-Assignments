@@ -50,7 +50,6 @@ await page.waitForTimeout(2000);
 //await page.mouse.wheel(0, 700);
 const uploadedfilename = await page.locator('(//span[contains(text(),"file1")])[2]').innerText();
 await expect(uploadedfilename).toContain("file1");
-
 //We can't send you a verification code right now. Please try again later.
 
 }

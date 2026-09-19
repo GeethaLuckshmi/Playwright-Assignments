@@ -14,6 +14,7 @@ await page.waitForLoadState("domcontentloaded");
 await page.waitForTimeout(4000);
 await page.locator('.slds-icon-waffle').last().click();
 //await context.storageState({path:"Data/salesforcelogin.json"})
+await page.waitForTimeout(2000);
 await page.getByRole('button',{name:"View All Applications"}).click();
 await page.waitForTimeout(2000);
 await page.getByPlaceholder("Search apps or items...", { exact: true }).fill("Accounts");
@@ -23,29 +24,34 @@ await page.waitForTimeout(2000);
 await page.getByRole('button',{name:"New"}).click();
 await page.getByRole('textbox',{name:"Account Name"}).fill(userName);
 await page.waitForTimeout(1000);
-page.getByRole('combobox',{name:"Rating"}).click();
+await page.getByRole('combobox',{name:"Rating"}).click();
 //await page.getByLabel('Rating',{exact:true}).click();
-page.getByTitle('Warm',{exact:true}).click()
+await page.getByTitle('Warm',{exact:true}).click()
 await page.waitForTimeout(1000);
-page.getByRole('combobox',{name:"Type"}).click()
-page.getByTitle('Prospect',{exact:true}).click()
+await page.getByRole('combobox',{name:"Type"}).click()
+await page.getByTitle('Prospect',{exact:true}).click()
 await page.waitForTimeout(1000);
-page.getByRole('combobox',{name:"Industry"}).click()
-page.getByTitle('Banking',{exact:true}).click()
+await page.getByRole('combobox',{name:"Industry"}).click()
+await page.getByTitle('Banking',{exact:true}).click()
 await page.waitForTimeout(2000);
-page.getByRole('combobox',{name:"Ownership"}).click()
-page.getByTitle('Public',{exact:true}).click()
+await page.getByRole('combobox',{name:"Ownership"}).first().click()
+await page.getByTitle('Public',{exact:true}).click()
 await page.locator('//button[@name="SaveEdit"]').click();
 const accountName = await page.locator('//slot[@name="primaryField"]/lightning-formatted-text').innerText();
 expect(accountName).toBe(userName);
 await page.locator('//div[text()="Upload Files"]').scrollIntoViewIfNeeded();
 const [uploadfile] = await Promise.all([page.waitForEvent("filechooser"),page.locator('//div[text()="Upload Files"]').click()]);
-uploadfile.setFiles(path.join(__dirname,"../../Data/file1.png",))
 await page.waitForTimeout(2000);
+await uploadfile.setFiles(path.join(__dirname,"../../Data/file1.png",))
 await expect.soft(page.locator('//span[text()="Done"]')).toBeEnabled();
+await page.waitForTimeout(2000);
 await page.locator('//span[text()="Done"]').click();
 await page.waitForTimeout(2000);
-await expect(page.locator('//span[contains(text(),"file1")]')).toBeVisible();
+//await page.mouse.wheel(0, 700);
+const uploadedfilename = await page.locator('(//span[contains(text(),"file1")])[2]').innerText();
+await expect(uploadedfilename).toContain("file1");
+
+//We can't send you a verification code right now. Please try again later.
 
 }
 )
